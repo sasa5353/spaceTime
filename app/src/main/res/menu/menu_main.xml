@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.android.alext.spacetime.MainActivity">
+    <!--<item-->
+        <!--android:id="@+id/action_settings"-->
+        <!--android:orderInCategory="1"-->
+        <!--android:title="@string/action_settings"-->
+        <!--app:showAsAction="never" />-->
+
+    <item android:id="@+id/action_ntpserver"
+        android:title="@string/ntp_server"
+        android:orderInCategory="2"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_dolgota"
+        android:title="@string/dolgota"
+        android:orderInCategory="3"
+        app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="0"
+        android:icon="@drawable/ic_action_search"
+        app:showAsAction="always"
+        android:title="@string/action_search"/>
+
+
+
+
+</menu>

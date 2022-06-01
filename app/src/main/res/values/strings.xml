@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">SpaceTime (Betta) for Android</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_delete_all">Delete</string>
+    <string name="action_search">Search</string>
+
+    <string name="tt_time_gmt">[GMT] : %1$s</string>
+    <string name="tt_time_pst">[PST] : %1$s</string>
+    <string name="tt_time_device">[PST] : %1$s</string>
+    <string name="tt_time_delta">[DDT] : %1$s</string>
+    <string name="tt_time_priv">[PFS] : %1$s</string>
+    <string name="tt_time_lmst">[LMST]: %1$s</string>
+    <string name="ntp_server">NTP Server</string>
+    <string name="dolgota">Dolgota</string>
+
+    <!-- Preference framework strings. -->
+    <string name="ok">OK</string>
+    <!-- Preference framework strings. -->
+    <string name="cancel">Cancel</string>
+    <!-- Preference framework strings. -->
+    <string name="yes">OK</string>
+    <!-- Preference framework strings. -->
+    <string name="clear">Clear cache</string>
+    <string name="ntp_adress">time.google.com</string>
+    <string name="dolgota_def">30.2948791667</string>
+
+
+</resources>
