@@ -1,5 +1,8 @@
 package com.instacart.library.sample;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.pow;
+
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -46,9 +49,6 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-
-import static java.lang.Math.PI;
-import static java.lang.Math.pow;
 
 //import static com.instacart.library.sample.App.TAG;
 
@@ -302,7 +302,8 @@ public class MainActivity
 
                 @Override
                 public void run() {
-                    updateTime(false);
+                    updateTime();
+//                    updateTime(false);
 //                    mCounterTextView.setText(strDate);
 //                    Toolkit.getDefaultToolkit().beep();
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
@@ -334,7 +335,7 @@ public class MainActivity
                     mTimer = new Timer();
                     MyTimerTask mMyTimerTask = new MyTimerTask();
 
-                    updateTime();
+//                    updateTime();
                     int delay = (int) ((500.1 -(LocalMeanSiderialTime%500))*365.25/366.25);
 
                     int period = (int)(500.1*365.25/366.25);
@@ -352,7 +353,7 @@ public class MainActivity
             //Обрабатываем нажатие кнопки гарнитуры:
             case KeyEvent.KEYCODE_HEADSETHOOK:
                 //Toast.makeText(this, "Нажата кнопка гарнитуры", Toast.LENGTH_SHORT).show();
-                updateTime(true);
+                updateTime(true, false);
                 return true;
 
             //Обрабатываем нажатие другой кнопки:
@@ -379,8 +380,9 @@ public class MainActivity
         MyGlobalTimerTask mMyGlobalTimerTask = new MyGlobalTimerTask();
 
 //        Double coeff = 366.2425/365.2425;
-        updateTime();
-        int delay = 0;//(int) ((1000.1 -(LocalMeanSiderialTime%1000))*365.25/366.25);
+        updateTime(false);
+//        int delay = 0;//(int) ((1000.1 -(LocalMeanSiderialTime%1000))*365.25/366.25);
+        int delay = (int) ((1000.1 -(LocalMeanSiderialTime%1000))*365.25/366.25);
 
 //        if (mSingleShotCheckBox.isChecked()) {
 //            // singleshot delay 1000 ms
@@ -396,10 +398,13 @@ public class MainActivity
     }
 
     private void updateTime() {
-        updateTime(false);
+        updateTime(true);
+    }
+    private void updateTime(Boolean visible) {
+        updateTime(false, visible);
     }
 
-    private void updateTime(Boolean writedown) {
+    private void updateTime(Boolean writedown, Boolean visible) {
         if (!TrueTimeRx.isInitialized()) {
             Toast.makeText(this, "Sorry TrueTime not yet initialized.", Toast.LENGTH_SHORT).show();
             return;
@@ -418,17 +423,19 @@ public class MainActivity
 //                _formatDate(deviceTime, "HH:mm:ss.SS", TimeZone.getTimeZone("GMT+03:00"))));
 //        timeGMT.setText(getString(R.string.tt_time_gmt,
 //                _formatDate(trueTime, "HH:mm:ss.SS", TimeZone.getTimeZone("GMT"))));
-        timePST.setText(getString(R.string.tt_time_pst,
-                _formatDate(trueTime, "HH:mm:ss.SS", TimeZone.getTimeZone("GMT+03:00"))));
-
+        if (visible) {
+            timePST.setText(getString(R.string.tt_time_pst,
+                    _formatDate(trueTime, "HH:mm:ss.SS", TimeZone.getTimeZone("GMT+03:00"))));
+        }
         long delt = trueTime.getTime() - deviceTime.getTime();
 
         Date datka = new Date();
         datka.setTime(delt);
 
-        timeDelta.setText(getString(R.string.tt_time_delta,
-                _formatDate(datka, "HH:mm:ss.SSS", TimeZone.getTimeZone("GMT"))));
-
+        if (visible) {
+            timeDelta.setText(getString(R.string.tt_time_delta,
+                    _formatDate(datka, "HH:mm:ss.SSS", TimeZone.getTimeZone("GMT"))));
+        }
 //        long prev;
 //        prev = trueTime.getTime();
 //        prev-=prev%5000;
@@ -440,6 +447,9 @@ public class MainActivity
         int pojas = 3;
 
         long UTC = trueTime.getTime();
+        if (!mSingleShotCheckBox.isChecked()) {
+            UTC = (new Date()).getTime();
+        }
         long alfa = 0;//-116;  // -0.11568
         long UT1 = UTC + alfa;
         boolean flag = false;
@@ -503,17 +513,23 @@ public class MainActivity
 
         _s+="."+((LMSTime%1000)/100);
 
-        timeLMST.setText(_s);
+        if (visible && ((LMSTime%1000)/100)%5 != 0) {
+            Toast.makeText(this, "Сейчас почему-то: " + ((LMSTime%1000)/100), Toast.LENGTH_SHORT).show();
+        }
+        if (visible) {
+            timeLMST.setText(_s);
+        }
         LocalMeanSiderialTime = LMSTime;
 
         long prev;
         prev = LMSTime;
         prev-=prev%5000;
         datka.setTime(prev);
-        timePriveos.setText(getString(R.string.tt_time_priv,
+        if (visible) {
+            timePriveos.setText(getString(R.string.tt_time_priv,
 //                _formatDate(datka, "yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT+03:00"))));
-                _formatDate(datka, "HH:mm:ss", TimeZone.getTimeZone("GMT"))));
-
+                    _formatDate(datka, "HH:mm:ss", TimeZone.getTimeZone("GMT"))));
+        }
         if (writedown) {
 
             String text = timeLMST.getText().toString() + "\n";

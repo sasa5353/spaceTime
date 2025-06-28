@@ -15,7 +15,7 @@ ext {
     compileSdkVersion = 27
 
     versionCode = 10
-    versionName = '3.3'
+    versionName = '3.4'
 }
 
 allprojects {
